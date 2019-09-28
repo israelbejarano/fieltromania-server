@@ -118,4 +118,31 @@ app.put('/:id', [mdAutenticacion.verificarToken, mdAutenticacion.verificarAdminR
     });
 });
 
+// ========================================
+// actualizar tipo.
+// ========================================
+app.delete('/:id', [mdAutenticacion.verificarToken, mdAutenticacion.verificarAdminRole], (req, res) => {
+    var id = req.params.id;
+    Tipo.findByIdAndRemove(id, (err, tipoBorrado) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error borrando tipo en BBDD',
+                errors: err
+            });
+        }
+        if (!tipoBorrado) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'El tipo con id ' + id + ' no existe',
+                errors: { message: 'No existe tipo con este ID' }
+            });
+        }
+        res.status(200).json({
+            ok: true,
+            tipo: tipoBorrado
+        });
+    });
+});
+
 module.exports = app; //con esto puedo usar este fichero en cualquier parte del server
