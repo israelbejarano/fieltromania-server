@@ -21,6 +21,7 @@ app.use(bodyParser.json()); // parse application/json
 // Importar rutas
 var appRoutes = require('./routes/app');
 var usuarioRoutes = require('./routes/usuario');
+var loginRoutes = require('./routes/login');
 
 // Conexion a BBDD
 mongoose.connection.openUri('mongodb://localhost:27017/fieltroManiaDB', (err, res) => {
@@ -31,6 +32,7 @@ mongoose.connection.openUri('mongodb://localhost:27017/fieltroManiaDB', (err, re
 
 // Rutas
 
+app.use('/login', loginRoutes);
 app.use('/usuario', usuarioRoutes);
 app.use('/', appRoutes); // esta ruta siempre tiene que ser la ultima si no no haria distinciones
 
