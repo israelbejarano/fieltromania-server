@@ -153,7 +153,7 @@ app.put('/:id', [mdAutenticacion.verificarToken, mdAutenticacion.verificarAdminO
             return res.status(400).json({
                 ok: false,
                 mensaje: 'El usuario con id ' + id + ' no existe',
-                errors: { message: 'No existe usario con este ID' }
+                errors: { message: 'No existe usuario con este ID' }
             });
         }
         usuario.nombre = body.nombre;
