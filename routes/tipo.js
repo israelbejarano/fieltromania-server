@@ -55,4 +55,28 @@ app.get('/:id', [mdAutenticacion.verificarToken], (req, res) => {
     });
 });
 
+// ========================================
+// crear tipo.
+// ========================================
+app.post('/', [mdAutenticacion.verificarToken, mdAutenticacion.verificarAdminRole], (req, res) => {
+    var body = req.body;
+    var tipo = new Tipo({
+        tipo: body.tipo
+    });
+
+    tipo.save((err, tipoGuardado) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'Error guardando tipo en BBDD',
+                errors: err
+            });
+        }
+        res.status(201).json({
+            ok: true,
+            tipo: tipoGuardado
+        });
+    });
+});
+
 module.exports = app; //con esto puedo usar este fichero en cualquier parte del server
