@@ -11,14 +11,7 @@ var Usuario = require('../models/usuario');
 // ========================================
 app.get('/todos', [mdAutenticacion.verificarToken], (req, res, next) => {
 
-    var desde = req.query.desde || 0;
-    desde = Number(desde);
-
     Usuario.find({}, (err, usuarios) => { // devuelve todo el objeto usuario sin mas
-        /* Usuario.find({}, 'nombre apellidos email avatar role google')
-            .skip(desde) // para ir paginando se salta los desde usuarios
-            .limit(5) // paginacion de 5 elementos por paginas
-            .exec((err, usuarios) => { */
         if (err) {
             return res.status(500).json({
                 ok: false,
