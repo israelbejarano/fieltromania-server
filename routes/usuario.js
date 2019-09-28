@@ -44,4 +44,35 @@ app.get('/', (req, res, next) => {
         });
 });
 
+// ========================================
+// crear un nuevo usuario
+// ========================================
+app.post('/', (req, res) => {
+    var body = req.body;
+    // declaro el usuario a guardar con los datos que trae el body que son los datos del usuario
+    var usuario = new Usuario({
+        nombre: body.nombre,
+        apellidos: body.apellidos,
+        email: body.email,
+        password: bcrypt.hashSync(body.password, 10),
+        avatar: body.avatar,
+        role: body.role
+    });
+
+    usuario.save((err, usuarioGuardado) => { // moongose
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'Error guardando usuario en BBDD',
+                errors: err
+            });
+        }
+        res.status(201).json({
+            ok: true,
+            usuario: usuarioGuardado,
+            usuarioToken: req.usuario
+        });
+    });
+});
+
 module.exports = app; //con esto puedo usar este fichero en cualquier parte del server
