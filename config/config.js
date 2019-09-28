@@ -1,0 +1,1 @@
+module.exports.SEED = 'pon-tu-seed-aqui';
