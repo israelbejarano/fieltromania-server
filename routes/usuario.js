@@ -15,33 +15,33 @@ app.get('/', (req, res, next) => {
     var desde = req.query.desde || 0;
     desde = Number(desde);
 
-    // Usuario.find({}, (err, usuarios) => {    // devuelve todo el objeto usuario sin mas
-    Usuario.find({}, 'nombre apellidos email img role google')
-        .skip(desde) // para ir paginando se salta los desde usuarios
-        .limit(5) // paginacion de 5 elementos por paginas
-        .exec((err, usuarios) => {
+    Usuario.find({}, (err, usuarios) => { // devuelve todo el objeto usuario sin mas
+        /* Usuario.find({}, 'nombre apellidos email img role google')
+            .skip(desde) // para ir paginando se salta los desde usuarios
+            .limit(5) // paginacion de 5 elementos por paginas
+            .exec((err, usuarios) => { */
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error cargando usuario de BBDD',
+                errors: err
+            });
+        }
+        Usuario.count({}, (err, total) => {
             if (err) {
                 return res.status(500).json({
                     ok: false,
-                    mensaje: 'Error cargando usuario de BBDD',
+                    mensaje: 'Error contando usuarios de BBDD',
                     errors: err
                 });
             }
-            Usuario.count({}, (err, total) => {
-                if (err) {
-                    return res.status(500).json({
-                        ok: false,
-                        mensaje: 'Error contando usuarios de BBDD',
-                        errors: err
-                    });
-                }
-                res.status(200).json({
-                    ok: true,
-                    usuarios: usuarios, //segun EM6 esto es redundante y se puede hacer solo usuarios, pero asi queda mas claro
-                    total: total
-                });
+            res.status(200).json({
+                ok: true,
+                usuarios: usuarios, //segun EM6 esto es redundante y se puede hacer solo usuarios, pero asi queda mas claro
+                total: total
             });
         });
+    });
 });
 
 // ========================================
@@ -114,6 +114,34 @@ app.put('/:id', [mdAutenticacion.verificarToken, mdAutenticacion.verificarAdminO
                 usuario: usuarioGuardado
             });
         });
+    });
+});
+
+// ========================================
+// borrar usuario
+// ========================================
+app.delete('/:id', [mdAutenticacion.verificarToken, mdAutenticacion.verificarAdminOrMismoUsuario], (req, res) => {
+    var id = req.params.id;
+    Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error borrando usuario en BBDD',
+                errors: err
+            });
+        }
+        if (!usuarioBorrado) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'El usuario con id ' + id + ' no existe',
+                errors: { message: 'No existe usario con este ID' }
+            });
+        }
+        res.status(200).json({
+            ok: true,
+            usuario: usuarioBorrado
+        });
+
     });
 });
 
