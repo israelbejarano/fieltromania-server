@@ -23,6 +23,7 @@ var appRoutes = require('./routes/app');
 var usuarioRoutes = require('./routes/usuario');
 var loginRoutes = require('./routes/login');
 var tipoRoutes = require('./routes/tipo');
+var productoRoutes = require('./routes/producto');
 
 // Conexion a BBDD
 mongoose.connection.openUri('mongodb://localhost:27017/fieltroManiaDB', (err, res) => {
@@ -33,6 +34,7 @@ mongoose.connection.openUri('mongodb://localhost:27017/fieltroManiaDB', (err, re
 
 // Rutas
 
+app.use('/producto', productoRoutes);
 app.use('/tipo', tipoRoutes);
 app.use('/login', loginRoutes);
 app.use('/usuario', usuarioRoutes);
