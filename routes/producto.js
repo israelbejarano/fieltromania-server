@@ -70,4 +70,32 @@ app.get('/', [mdAutenticacion.verificarToken], (req, res) => {
             });
         });
 });
+
+// ========================================
+// Obtener producto por id
+// ========================================
+app.get('/:id', [mdAutenticacion.verificarToken], (req, res) => {
+    var id = req.params.id;
+    Producto.findById(id, (err, producto) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error cargando producto de BBDD',
+                errors: err
+            });
+        }
+        if (!producto) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'El producto con id ' + id + ' no existe',
+                errors: { message: 'No existe producto con este ID' }
+            });
+        }
+        res.status(200).json({
+            ok: true,
+            producto
+        });
+    });
+});
+
 module.exports = app; //con esto puedo usar este fichero en cualquier parte del server
