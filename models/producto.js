@@ -4,7 +4,8 @@ var uniqueValidator = require('mongoose-unique-validator');
 var Schema = mongoose.Schema;
 var InfoSobreProdSchema = new Schema({
     usuario: { type: Schema.Types.ObjectId, ref: 'Usuario', required: true },
-    comentario: { type: String }
+    comentario: { type: String, required: [true, 'El comentario es obligatorio'] },
+    createAt: { type: Date, required: [true, 'la fecha de creacion es obligatoria'], default: new Date() }
 });
 
 var productoSchema = new Schema({
