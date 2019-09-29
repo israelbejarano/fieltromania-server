@@ -21,9 +21,19 @@ app.get('/', [mdAutenticacion.verificarToken], (req, res) => {
                 errors: err
             });
         }
-        res.status(200).json({
-            ok: true,
-            tipos
+        Tipo.count({}, (err, total) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    mensaje: 'Error contando tipos de BBDD',
+                    errors: err
+                });
+            }
+            res.status(200).json({
+                ok: true,
+                tipos,
+                total
+            });
         });
     });
 });
