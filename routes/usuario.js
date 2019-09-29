@@ -11,7 +11,7 @@ var Usuario = require('../models/usuario');
 // ========================================
 app.get('/todos', [mdAutenticacion.verificarToken], (req, res, next) => {
 
-    Usuario.find({}, (err, usuarios) => { // devuelve todo el objeto usuario sin mas
+    Usuario.find({}, 'nombre apellidos email avatar role google', (err, usuarios) => { // devuelve todo el objeto usuario sin mas
         if (err) {
             return res.status(500).json({
                 ok: false,
