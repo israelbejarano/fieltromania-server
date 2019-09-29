@@ -11,7 +11,7 @@ var Usuario = require('../models/usuario');
 // ========================================
 app.get('/todos', [mdAutenticacion.verificarToken], (req, res, next) => {
 
-    Usuario.find({}, 'nombre apellidos email avatar role google', (err, usuarios) => { // devuelve todo el objeto usuario sin mas
+    Usuario.find({}, 'nombre apellidos email avatar role google crateAt', (err, usuarios) => { // devuelve todo el objeto usuario sin mas
         if (err) {
             return res.status(500).json({
                 ok: false,
@@ -44,7 +44,7 @@ app.get('/', [mdAutenticacion.verificarToken], (req, res, next) => {
     var desde = req.query.desde || 0;
     desde = Number(desde);
 
-    Usuario.find({}, 'nombre apellidos email avatar role google')
+    Usuario.find({}, 'nombre apellidos email avatar role google createAt')
         .skip(desde) // para ir paginando se salta los desde usuarios
         .limit(5) // paginacion de 5 elementos por paginas
         .exec((err, usuarios) => {
@@ -77,7 +77,7 @@ app.get('/', [mdAutenticacion.verificarToken], (req, res, next) => {
 // ========================================
 app.get('/:id', [mdAutenticacion.verificarToken], (req, res) => {
     var id = req.params.id;
-    Usuario.findById(id, 'nombre apellidos email avatar role google', (err, usuario) => {
+    Usuario.findById(id, 'nombre apellidos email avatar role google createAt', (err, usuario) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
