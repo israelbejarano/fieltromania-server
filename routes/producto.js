@@ -167,4 +167,31 @@ app.put('/:id', [mdAutenticacion.verificarToken, mdAutenticacion.verificarAdminR
     })
 });
 
+// ========================================
+// borrar producto
+// ========================================
+app.delete('/:id', [mdAutenticacion.verificarToken, mdAutenticacion.verificarAdminRole], (req, res) => {
+    var id = req.params.id;
+    Producto.findByIdAndRemove(id, (err, productoBorrado) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error borrando producto en BBDD',
+                errors: err
+            });
+        }
+        if (!productoBorrado) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'El producto con id ' + id + ' no existe',
+                errors: { message: 'No existe producto con este ID' }
+            });
+        }
+        res.status(200).json({
+            ok: true,
+            producto: productoBorrado
+        });
+    });
+});
+
 module.exports = app; //con esto puedo usar este fichero en cualquier parte del server
