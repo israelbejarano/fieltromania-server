@@ -126,6 +126,7 @@ app.post('/', (req, res) => {
                 errors: err
             });
         }
+        usuarioGuardado.password = ':)'; // esto es para no mostrar el password en el json pero no afecta a BBDD
         res.status(201).json({
             ok: true,
             usuario: usuarioGuardado,
