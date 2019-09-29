@@ -129,5 +129,42 @@ app.post('/', [mdAutenticacion.verificarToken, mdAutenticacion.verificarAdminRol
 // ========================================
 // actualizar producto
 // ========================================
+app.put('/:id', [mdAutenticacion.verificarToken, mdAutenticacion.verificarAdminRole], (req, res) => {
+    var id = req.params.id;
+    var body = req.body;
+
+    Producto.findById(id, (err, producto) => {
+        if (err) {
+            return res.status(500).json({ // 500 porque si hay error es por el servidor porque o devueve usuario o null
+                ok: false,
+                mensaje: 'Error al buscar producto en BBDD',
+                errors: err
+            });
+        }
+        if (!producto) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'El producto con id ' + id + ' no existe',
+                errors: { message: 'No existe producto con este ID' }
+            });
+        }
+        producto.nombre = body.nombre;
+        producto.precio = body.precio;
+        producto.descripcion = body.descripcion;
+        producto.save((err, productoGuardado) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'Error al actualizar producto en BBDD',
+                    errors: err
+                });
+            }
+            res.status(200).json({
+                ok: true,
+                Producto: productoGuardado
+            });
+        });
+    })
+});
 
 module.exports = app; //con esto puedo usar este fichero en cualquier parte del server
