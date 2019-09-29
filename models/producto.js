@@ -15,6 +15,7 @@ var productoSchema = new Schema({
     img: { type: String, required: [false] },
     tipo: { type: Schema.Types.ObjectId, ref: 'Tipo', required: true },
     usuario: { type: Schema.Types.ObjectId, ref: 'Usuario', required: true },
+    createAt: { type: Date, required: [true, 'la fecha de creacion es obligatoria'], default: new Date() },
     infoSobreProd: { type: [InfoSobreProdSchema], required: false }
 });
 
