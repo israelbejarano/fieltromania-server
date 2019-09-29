@@ -98,4 +98,36 @@ app.get('/:id', [mdAutenticacion.verificarToken], (req, res) => {
     });
 });
 
+// ========================================
+// crear un nuevo producto
+// ========================================
+app.post('/', [mdAutenticacion.verificarToken, mdAutenticacion.verificarAdminRole], (req, res) => {
+    var body = req.body;
+    var producto = new Producto({
+        nombre: body.nombre,
+        precio: body.precio,
+        descripcion: body.descripcion,
+        usuario: req.usuario._id,
+        tipo: body.tipo
+    });
+
+    producto.save((err, productoGuardado) => {
+        if (err) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'Error guardando producto en BBDD',
+                errors: err
+            });
+        }
+        res.status(201).json({
+            ok: true,
+            producto: productoGuardado
+        });
+    });
+});
+
+// ========================================
+// actualizar producto
+// ========================================
+
 module.exports = app; //con esto puedo usar este fichero en cualquier parte del server
